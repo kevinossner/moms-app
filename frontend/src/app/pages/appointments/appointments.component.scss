@@ -1,0 +1,26 @@
+.appointment-card {
+  margin-bottom: 1em;
+}
+
+.close-btn {
+  float: right;
+}
+
+.mat-mdc-card-header {
+  padding-top: 0;
+  padding-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.back-btn {
+  background-color: var(--color-main);
+  left: 5vw;
+  position: fixed;
+  z-index: 1000;
+  bottom: 14vh;
+}
+
+.drop-icon {
+  color: var(--color-main);
+}

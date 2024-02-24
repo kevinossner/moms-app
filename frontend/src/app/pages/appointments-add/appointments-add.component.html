@@ -1,0 +1,36 @@
+<h1>Termin hinzufügen</h1>
+<mat-card class="add-appointment-card">
+  <mat-card-content>
+    <div class="row">
+      <mat-form-field class="course-form">
+        <mat-label>Kurse</mat-label>
+        <mat-select [(ngModel)]="selectedCourse">
+          <mat-option *ngFor="let course of courses" [value]="course.id">
+            {{ course.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Datum</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-icon-button (click)="onSave()">
+      <mat-icon class="colored-icon">save</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<button mat-fab class="back-btn" (click)="onBack()">
+  <mat-icon>arrow_back_ios_new</mat-icon>
+</button>

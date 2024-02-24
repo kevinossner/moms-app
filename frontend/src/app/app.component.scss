@@ -1,0 +1,32 @@
+header {
+  background-color: var(--color-white);
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  height: 6vh;
+  width: 100%;
+}
+
+.logout-btn {
+  float: right;
+}
+
+nav {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-around;
+  height: 10vh;
+  padding-bottom: 3vh;
+  background-color: var(--color-white);
+}
+
+.content {
+  margin-left: 5vw;
+  margin-right: 5vw;
+  padding-bottom: 18vh;
+  font-family: "Roboto";
+  padding-top: 6vh;
+}

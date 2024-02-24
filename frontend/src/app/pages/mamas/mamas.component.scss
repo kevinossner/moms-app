@@ -1,0 +1,30 @@
+.add-btn {
+  background-color: var(--color-main);
+  right: 5vw;
+  position: fixed;
+  z-index: 1000;
+  bottom: 14vh;
+}
+
+.mama-card-ok {
+  margin-bottom: 1em;
+  border-left-width: 0.5em;
+  border-color: green;
+}
+
+.mama-card-nok {
+  margin-bottom: 1em;
+  border-left-width: 0.5em;
+  border-color: red;
+}
+
+.close-btn {
+  float: right;
+}
+
+.mat-mdc-card-header {
+    padding-top: 0;
+    padding-right: 8px;
+    display: flex;
+    align-items: center;
+}

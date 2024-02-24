@@ -1,0 +1,60 @@
+<h1>Mama hinzufügen</h1>
+<mat-card class="add-mama-card">
+  <mat-card-content>
+    <div class="col">
+      <div class="row">
+        <mat-form-field class="name-form">
+          <mat-label>Vorname</mat-label>
+          <input matInput type="text" [(ngModel)]="firstName" />
+          <button
+            *ngIf="firstName"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="firstName = ''"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="name-form">
+          <mat-label>Nachname</mat-label>
+          <input matInput type="text" [(ngModel)]="lastName" />
+          <button
+            *ngIf="lastName"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="lastName = ''"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="course-form">
+          <mat-label>Kurse</mat-label>
+          <mat-select [(ngModel)]="selectedCourses" multiple>
+            <mat-option *ngFor="let course of courses" [value]="course.id">
+              {{ course.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-slide-toggle [(ngModel)]="billsPayed"
+          >Alles bezahlt</mat-slide-toggle
+        >
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-icon-button (click)="onSave()" [disabled]="!firstName || !lastName">
+      <mat-icon class="colored-icon">save</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
+<button mat-fab class="back-btn" (click)="onBack()">
+  <mat-icon>arrow_back_ios_new</mat-icon>
+</button>

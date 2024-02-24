@@ -1,0 +1,16 @@
+::ng-deep .mat-calendar-body-selected {
+    background-color: var(--color-main) !important;
+  }
+  
+  .add-btn {
+    background-color: var(--color-main);
+    right: 5vw;
+    position: fixed;
+    z-index: 1000;
+    bottom: 14vh;
+  }
+  
+  ::ng-deep .special-date {
+    border: 5px solid var(--color-main) !important;
+    border-radius: 90%;
+  }

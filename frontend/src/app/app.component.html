@@ -1,0 +1,19 @@
+<header>
+  <button mat-icon-button class="logout-btn">
+    <mat-icon class="base-icon">logout</mat-icon>
+  </button>
+</header>
+<nav>
+  <button mat-icon-button class="nav-btn" (click)="navigate('/')">
+    <mat-icon class="base-icon">home</mat-icon>
+  </button>
+  <button mat-icon-button class="nav-btn" (click)="navigate('/mamas/')">
+    <mat-icon class="base-icon">people</mat-icon>
+  </button>
+  <button mat-icon-button class="nav-btn" (click)="navigate('/calendar/')">
+    <mat-icon class="base-icon">calendar_month</mat-icon>
+  </button>
+</nav>
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
