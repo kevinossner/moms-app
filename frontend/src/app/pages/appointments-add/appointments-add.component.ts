@@ -21,29 +21,28 @@ export class AppointmentsAddComponent {
 
   selectedCourse: string | undefined;
   courses: Course[] = [];
+  selectedDate: string | undefined;
 
   ngOnInit(): void {
     this.restService.getCourses().subscribe({
       next: (res) => {
-        this.courses = res;
+        this.courses = res.data;
       },
     });
   }
 
-  selectedDate: string | undefined;
-  appointment: PostAppointment | undefined;
-
   onSave(): void {
     if (this.selectedDate && this.selectedCourse) {
-      this.appointment = {
+      let appointment: PostAppointment = {
         courseId: this.selectedCourse,
         date: new Date(this.selectedDate).toLocaleString('de-DE', {
           day: '2-digit',
           month: '2-digit',
           year: 'numeric',
         }),
+        momsAttended: []
       };
-      this.restService.postAppointment(this.appointment).subscribe({
+      this.restService.postAppointment(appointment).subscribe({
         complete: () => {
           this.router.navigate(['/calendar/'], { skipLocationChange: true });
           this.snackBar.open('Termin hinzugefügt!', 'Ausblenden', {

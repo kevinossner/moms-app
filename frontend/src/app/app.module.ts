@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,9 +29,9 @@ import { MamasComponent } from './pages/mamas/mamas.component';
 import { HomeComponent } from './pages/home/home.component';
 import { MamaAddComponent } from './pages/mama-add/mama-add.component';
 import { MamaEditComponent } from './pages/mama-edit/mama-edit.component';
-// import { AppointmentsAddComponent } from './pages/appointments-add/appointments-add.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
-// import { AppointmentsComponent } from './pages/appointments/appointments.component';
+import { AppointmentsComponent } from './pages/appointments/appointments.component';
+import { AppointmentsAddComponent } from './pages/appointments-add/appointments-add.component';
 
 @NgModule({
   declarations: [
@@ -37,11 +40,13 @@ import { CalendarComponent } from './pages/calendar/calendar.component';
     HomeComponent,
     MamaAddComponent,
     MamaEditComponent,
-    // AppointmentsComponent,
-    // AppointmentsAddComponent,
+    AppointmentsComponent,
+    AppointmentsAddComponent,
     CalendarComponent,
   ],
   imports: [
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore()),
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,

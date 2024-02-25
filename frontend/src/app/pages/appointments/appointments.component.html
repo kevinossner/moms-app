@@ -1,5 +1,35 @@
 <h1>{{ selectedDate }}</h1>
 <div *ngFor="let course of courses; let i = index">
+  <mat-card class="appointment-card" (click)="onCardClick(i)">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title
+          ><h2>{{ course.name }}</h2></mat-card-title
+        >
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-icon matListItemIcon>people</mat-icon>
+          <p>0/{{ momIds[i].length }}</p>
+        </div>
+      </div>
+      <div *ngIf="isSelected[i]">
+        <div *ngFor="let mom of selectedMoms; let i = index">
+          <p>{{mom.firstName}} {{mom.lastName}}</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+<button mat-fab class="back-btn" (click)="onBack()">
+  <mat-icon>arrow_back_ios_new</mat-icon>
+</button>
+<p>{{ test }}</p>
+
+<!-- <h1>{{ selectedDate }}</h1>
+<div *ngFor="let course of courses; let i = index">
   <mat-card class="appointment-card">
     <mat-card-header>
       <mat-card-title-group>
@@ -20,14 +50,14 @@
           <div *ngIf="courseRegistration.courseId === course.id">
             <div *ngFor="let registration of courseRegistration.registrations">
               <mat-list-item>
-                <!-- <button mat-icon-button (click)="onDeleteRegistration(registration.id)">
+                <button mat-icon-button (click)="onDeleteRegistration(registration.id)">
                   <mat-icon class="colored-icon">close</mat-icon>
-                </button> -->
+                </button>
                 {{ registration.mom.firstName }} {{ registration.mom.lastName }}
-                <!-- <mat-checkbox
+                <mat-checkbox
                 [checked]="registration.attended"
                 (change)="setAll(registration.id, $event.checked)">
-                </mat-checkbox> -->
+                </mat-checkbox>
               </mat-list-item>
             </div>
           </div>
@@ -52,4 +82,4 @@
       </button>
     </mat-card-actions>
   </mat-card>
-</ng-template>
+</ng-template> -->

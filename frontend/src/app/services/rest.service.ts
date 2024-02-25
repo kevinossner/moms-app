@@ -14,7 +14,7 @@ export interface PostMom {
   lastName: string;
   billsPayed: boolean;
   courses: string[];
-  appointments: string[]; 
+  attendance: number; 
 }
 
 export interface Mom extends PostMom {
@@ -26,10 +26,18 @@ export interface PostCourse {
   moms: string[];
 }
 
-export interface Course {
+export interface Course extends PostCourse {
   id: string;
-  name: string;
-  moms: string[];
+}
+
+export interface PostAppointment {
+  courseId: string;
+  date: string;
+  momsAttended: string[];
+}
+
+export interface Appointment extends PostAppointment {
+  id: string;
 }
 
 @Injectable({
@@ -102,5 +110,29 @@ export class RestService {
       .set('accept', 'application/json')
       .set('Content-Type', 'application/json');  
     return this.http.put<ApiResponse>(url, course, { headers });  
+  }
+
+  getAppointments(): Observable<ApiResponse> {
+    const url = `${this.backendUrl}/appointments/`;
+    const headers = new HttpHeaders()
+      .set('accept', 'application/json')
+      .set('Content-Type', 'application/json');
+    return this.http.get<ApiResponse>(url, { headers });
+  }
+
+  getAppointmentsByDate(date: string): Observable<ApiResponse> {
+    const url = `${this.backendUrl}/appointments/${date}`;
+    const headers = new HttpHeaders()
+      .set('accept', 'application/json')
+      .set('Content-Type', 'application/json');
+    return this.http.get<ApiResponse>(url, { headers });
+  }
+
+  postAppointment(appointment: PostAppointment): Observable<ApiResponse> {
+    const url = `${this.backendUrl}/appointments/`;
+    const headers = new HttpHeaders()
+      .set('accept', 'application/json')
+      .set('Content-Type', 'application/json');  
+    return this.http.post<ApiResponse>(url, appointment, { headers });  
   }
 }

@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { PostCourse, RestService } from '../../services/rest.service';
 import { Mom } from '../../services/rest.service';
+import { DataService } from '../../services/data.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { inject } from '@angular/core';
+import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-mamas',
@@ -11,8 +16,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./mamas.component.scss'],
 })
 export class MamasComponent implements OnInit {
+
   constructor(
     private restService: RestService,
+    private dataService: DataService,
     private router: Router,
     public dialog: MatDialog,
     private snackBar: MatSnackBar
@@ -34,7 +41,7 @@ export class MamasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchMoms();
+    this.dataService.getMoms().subscribe((res:any) => {this.moms = res});
   }
 
   openDialog(templateRef: any, id: string) {

@@ -3,7 +3,7 @@ export type BaseMom = {
     lastName: string;
     billsPayed: boolean;
     courses: string[];
-    appointments: string[];    
+    attendance: number;    
 }
 
 export type Mom = {
@@ -12,5 +12,5 @@ export type Mom = {
     lastName: string;
     billsPayed: boolean;
     courses: string[];
-    appointments: string[];
+    attendance: number;
 }

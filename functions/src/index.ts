@@ -4,6 +4,7 @@ import * as cors from "cors";
 import * as admin from "firebase-admin";
 import { momsRouter } from "./routes/moms";
 import { coursesRouter } from "./routes/courses";
+import { appointmentsRouter } from "./routes/appointments";
 
 
 var serviceAccount = require("../serviceAccountKey.json");
@@ -23,6 +24,7 @@ app.use(cors(corsOptions));
 
 app.use("/api/moms", momsRouter);
 app.use("/api/courses", coursesRouter);
+app.use("/api/appointments", appointmentsRouter);
 
 exports.app = functions.region("europe-west3").https.onRequest(app);
 

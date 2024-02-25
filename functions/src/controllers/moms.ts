@@ -23,7 +23,7 @@ export const readMoms = async (req: express.Request, res: express.Response) => {
         lastName: entry.data().lastName,
         billsPayed: entry.data().billsPayed,
         courses: entry.data().courses,
-        appointments: entry.data().appointments,
+        attendance: entry.data().attendance,
       };
       moms.push(momData);
     }
@@ -63,7 +63,7 @@ export const readMom = async (req: express.Request, res: express.Response) => {
       lastName: entry.data()!.lastName,
       billsPayed: entry.data()!.billsPayed,
       courses: entry.data()!.courses,
-      appointments: entry.data()!.appointments,
+      attendance: entry.data()!.attendance,
     };
 
     const resBody = {
@@ -92,7 +92,7 @@ export const createMom = async (
       lastName: req.body.lastName,
       billsPayed: req.body.billsPayed,
       courses: req.body.courses,
-      appointments: req.body.appointments,
+      attendance: req.body.attendance,
     };
     const docRef = await db.collection("moms").add(createMom);
     const mom: Mom = { id: docRef.id, ...createMom };
@@ -123,7 +123,7 @@ export const updateMom = async (
       lastName: req.body.lastName,
       billsPayed: req.body.billsPayed,
       courses: req.body.courses,
-      appointments: req.body.appointments,
+      attendance: req.body.attendance,
     };
 
     await db.collection("moms").doc(momId).set(updateMom, { merge: true });

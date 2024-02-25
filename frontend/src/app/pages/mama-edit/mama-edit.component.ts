@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RestService, PostMom, Course, PostCourse } from '../../services/rest.service';
+import { DataService } from '../../services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class MamaEditComponent implements OnInit {
   constructor(
     private restService: RestService,
+    private dataService: DataService,
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar
@@ -20,6 +22,7 @@ export class MamaEditComponent implements OnInit {
   firstName: string | undefined;
   lastName: string | undefined;
   billsPayed: boolean | undefined;
+  attendance: number | undefined;
   initialCourses: string[] = [];
   selectedCourses: string[] = [];
   allCourses: Course[] = [];
@@ -28,21 +31,18 @@ export class MamaEditComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.momId = params["id"]
-      this.restService.getMom(params["id"]).subscribe({
+      this.dataService.getMom(this.momId!).subscribe({
         next: (res) => {
-          this.firstName = res.data.firstName;
-          this.lastName = res.data.lastName;
-          this.billsPayed = res.data.billsPayed;
-          this.initialCourses = res.data.courses;
-          this.selectedCourses = res.data.courses;
-        }
+          this.firstName = res.firstName;
+          this.lastName = res.lastName;
+          this.billsPayed = res.billsPayed;
+          this.initialCourses = res.courses;
+          this.selectedCourses = res.courses;
+          this.attendance = res.attendance;
+        }        
       })
     })
-    this.restService.getCourses().subscribe({
-      next: (res) => {
-        this.allCourses = res.data;
-      }
-    })
+    this.dataService.getCourses().subscribe((res) => {this.allCourses = res})
   }
 
   onSave(): void {
@@ -53,7 +53,7 @@ export class MamaEditComponent implements OnInit {
       lastName: this.lastName!,
       billsPayed: this.billsPayed!,
       courses: this.selectedCourses,
-      appointments: []
+      attendance: this.attendance!
     }
 
     this.restService.putMom(this.momId!, mom).subscribe({

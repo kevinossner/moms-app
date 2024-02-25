@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RestService, PostMom, PostCourse, Course } from '../../services/rest.service';
+import { DataService } from '../../services/data.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class MamaAddComponent implements OnInit {
   constructor(
     private restService: RestService,
+    private dataService: DataService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {}
@@ -24,11 +26,7 @@ export class MamaAddComponent implements OnInit {
   createdMom: string | undefined;
 
   ngOnInit(): void {
-    this.restService.getCourses().subscribe({
-      next: (res) => {
-        this.courses = res.data;
-      }
-    })
+    this.dataService.getCourses().subscribe((res) => {this.courses = res})
   }
   
   onSave(): void {
@@ -38,7 +36,7 @@ export class MamaAddComponent implements OnInit {
         lastName: this.lastName,
         billsPayed: this.billsPayed,
         courses: this.selectedCourses,
-        appointments: []
+        attendance: 0
       }
       this.restService.postMom(postMom).subscribe({
         next: (res) => {

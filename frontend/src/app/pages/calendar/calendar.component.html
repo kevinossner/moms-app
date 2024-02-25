@@ -1,23 +1,10 @@
-<!-- <h1>Termine</h1>
+<h1>Termine</h1>
 <div [ngSwitch]="dates.length>0">
   <mat-card *ngSwitchCase="true" class="calendar-card">
     <mat-calendar [dateClass]="dateClass()" [(selected)]="selectedDate" (selectedChange)="onSelect()" class="calendar"></mat-calendar>
   </mat-card>
   <mat-card *ngSwitchCase="false" class="calendar-card">
     <mat-calendar [(selected)]="selectedDate" (selectedChange)="onSelect()" class="calendar"></mat-calendar>
-  </mat-card>
-</div>
-<button mat-fab class="add-btn" (click)="onAdd()">
-  <mat-icon>add</mat-icon>
-</button> -->
-
-<h1>Termine</h1>
-<div [ngSwitch]="dates.length>0">
-  <mat-card *ngSwitchCase="true" class="calendar-card">
-    <mat-calendar [dateClass]="dateClass()" [(selected)]="selectedDate" class="calendar"></mat-calendar>
-  </mat-card>
-  <mat-card *ngSwitchCase="false" class="calendar-card">
-    <mat-calendar [(selected)]="selectedDate" class="calendar"></mat-calendar>
   </mat-card>
 </div>
 <button mat-fab class="add-btn" (click)="onAdd()">

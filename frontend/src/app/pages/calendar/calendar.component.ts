@@ -1,7 +1,9 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { RestService } from '../../services/rest.service';
+import { Router, NavigationExtras } from '@angular/router';
+import { RestService, PostAppointment, Appointment, Course } from '../../services/rest.service';
+import { DataService } from '../../services/data.service';
 import { MatCalendarCellCssClasses } from '@angular/material/datepicker';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
@@ -10,17 +12,18 @@ import { MatCalendarCellCssClasses } from '@angular/material/datepicker';
 })
 export class CalendarComponent {
   constructor(
-    private elem: ElementRef,
     private router: Router,
-    private restService: RestService
+    private restService: RestService,
+    private dataService: DataService
   ) {}
   selectedDate?: any;
   dates: string[] = [];
 
   ngOnInit() {
+    this.dataService.getAppointments().subscribe((res) => {res.forEach((appointment: any) => this.dates.push(appointment.date))})
     // this.restService.getAppointments().subscribe({
     //   next: (res) => {
-    //     res.forEach((appointment) => this.dates.push(appointment.date));
+    //     res.data.forEach((appointment: any) => this.dates.push(appointment.date));
     //   }
     // })
   }
@@ -44,11 +47,25 @@ export class CalendarComponent {
     let date = this.selectedDate
       .toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
       .split(',')[0];
-    this.router.navigate(['/appointments/', date], { skipLocationChange: true });
+    let appointments: Appointment[];
+    this.restService.getAppointmentsByDate(date).subscribe({
+      next: (res) => {
+        appointments = res.data;
+      },
+      complete: () => {
+        if (appointments.length>0) {
+          let data = {
+            date: date,
+            appointments: appointments
+          };
+          this.dataService.setData(data);
+          this.router.navigate(['/appointments/'], { skipLocationChange: true });
+        }
+      }
+    })
   }
 
   onAdd() {
-    let router = this.router;
-    router.navigate(['/appointments/add/'], { skipLocationChange: true });
+    this.router.navigate(['/appointments/add/'], { skipLocationChange: true });
   }
 }
