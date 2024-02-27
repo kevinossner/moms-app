@@ -6,6 +6,7 @@ import {
   PostAppointment,
   Course,
 } from '../../services/rest.service';
+import { DataService } from "../../services/data.service";
 
 @Component({
   selector: 'app-appointments-add',
@@ -15,6 +16,7 @@ import {
 export class AppointmentsAddComponent {
   constructor(
     private restService: RestService,
+    private dataService: DataService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {}
@@ -24,11 +26,7 @@ export class AppointmentsAddComponent {
   selectedDate: string | undefined;
 
   ngOnInit(): void {
-    this.restService.getCourses().subscribe({
-      next: (res) => {
-        this.courses = res.data;
-      },
-    });
+    this.dataService.getCourses().subscribe((courses) => {this.courses = courses});
   }
 
   onSave(): void {
@@ -42,16 +40,14 @@ export class AppointmentsAddComponent {
         }),
         momsAttended: []
       };
-      this.restService.postAppointment(appointment).subscribe({
-        complete: () => {
-          this.router.navigate(['/calendar/'], { skipLocationChange: true });
-          this.snackBar.open('Termin hinzugefügt!', 'Ausblenden', {
-            duration: 3 * 1000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-          });
-        },
-      });
+      this.dataService.postAppointment(appointment).then((createdAppointment) => {
+        this.router.navigate(['/calendar/'], { skipLocationChange: true });
+        this.snackBar.open('Termin hinzugefügt!', 'Ausblenden', {
+          duration: 3 * 1000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+        });       
+      })  
     }
   }
 

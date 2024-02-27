@@ -11,7 +11,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class MamaEditComponent implements OnInit {
   constructor(
-    private restService: RestService,
     private dataService: DataService,
     private router: Router,
     private route: ActivatedRoute,
@@ -55,32 +54,29 @@ export class MamaEditComponent implements OnInit {
       courses: this.selectedCourses,
       attendance: this.attendance!
     }
-
-    this.restService.putMom(this.momId!, mom).subscribe({
-      complete: () => {
-        this.router.navigate(['/mamas/'], { skipLocationChange: true });
-        this.snackBar.open('Mama bearbeited!', 'Ausblenden', {
-          duration: 3 * 1000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-        });        
-      }
-    })
-    coursesToDelete.forEach((courseId) => {
-      let course = this.allCourses.find((course: Course) => course.id === courseId)
-      let updatedCourse: PostCourse = {
-        name: course!.name,
-        moms: course!.moms.filter((mom: string) => mom !== this.momId)
-      }
-      this.restService.putCourse(courseId, updatedCourse).subscribe()
-    })
-    coursesToAdd.forEach((courseId) => {
-      let course = this.allCourses.find((course: Course) => course.id === courseId)
-      let updatedCourse: PostCourse = {
-        name: course!.name,
-        moms: [...course!.moms, this.momId!]
-      }
-      this.restService.putCourse(courseId, updatedCourse).subscribe()
+    this.dataService.putMom(this.momId!, mom).then(() => {
+      this.router.navigate(['/mamas/'], { skipLocationChange: true });
+      this.snackBar.open('Mama bearbeited!', 'Ausblenden', {
+        duration: 3 * 1000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+      });
+      coursesToDelete.forEach((courseId) => {
+        let course = this.allCourses.find((course: Course) => course.id === courseId)
+        let updatedCourse: PostCourse = {
+          name: course!.name,
+          moms: course!.moms.filter((mom: string) => mom !== this.momId)
+        }
+        this.dataService.putCourse(courseId, updatedCourse)
+      });
+      coursesToAdd.forEach((courseId) => {
+        let course = this.allCourses.find((course: Course) => course.id === courseId)
+        let updatedCourse: PostCourse = {
+          name: course!.name,
+          moms: [...course!.moms, this.momId!]
+        }
+        this.dataService.putCourse(courseId, updatedCourse)
+      })        
     })
   }
 

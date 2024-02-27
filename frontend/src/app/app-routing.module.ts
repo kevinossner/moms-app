@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'mamas/add', component: MamaAddComponent },
   { path: 'mamas/edit/:id', component: MamaEditComponent },
   { path: 'calendar', component: CalendarComponent },
-  { path: 'appointments', component: AppointmentsComponent },
+  { path: 'appointments/info/:date', component: AppointmentsComponent },
   { path: 'appointments/add', component: AppointmentsAddComponent },
 ]
 

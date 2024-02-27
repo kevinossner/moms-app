@@ -6,9 +6,6 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { inject } from '@angular/core';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-mamas',
@@ -16,9 +13,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./mamas.component.scss'],
 })
 export class MamasComponent implements OnInit {
-
   constructor(
-    private restService: RestService,
     private dataService: DataService,
     private router: Router,
     public dialog: MatDialog,
@@ -29,19 +24,10 @@ export class MamasComponent implements OnInit {
   selectedId: string | undefined;
   dialogRef: any;
 
-  fetchMoms(): void {
-    this.restService.getMoms().subscribe({
-      next: (res) => {
-        this.moms = res.data;
-      },
-      error: (error) => {
-        this.moms = [];
-      },
-    });
-  }
-
   ngOnInit(): void {
-    this.dataService.getMoms().subscribe((res:any) => {this.moms = res});
+    this.dataService.getMoms().subscribe((res: any) => {
+      this.moms = res;
+    });
   }
 
   openDialog(templateRef: any, id: string) {
@@ -58,29 +44,31 @@ export class MamasComponent implements OnInit {
   onDelete() {
     if (this.selectedId) {
       let snackBar = this.snackBar;
-      this.restService.deleteMom(this.selectedId).subscribe({
-        complete: () => {
-          this.fetchMoms();
-          this.dialogRef.close();
-          snackBar.open('Mama gelöscht!', 'Ausblenden', {
-            duration: 3 * 1000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-          });
-        },
+      this.dataService.deleteMom(this.selectedId).then(() => {
+        this.dataService.getMoms().subscribe((moms) => {
+          this.moms = moms;
+        });
+        this.dialogRef.close();
+        snackBar.open('Mama gelöscht!', 'Ausblenden', {
+          duration: 3 * 1000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+        });
       });
-      let selectedMom = this.moms.find(mom => mom.id === this.selectedId)
+      let selectedMom = this.moms.find((mom) => mom.id === this.selectedId);
       selectedMom?.courses.forEach((courseId) => {
-        this.restService.getCourse(courseId).subscribe({
+        this.dataService.getCourse(courseId).subscribe({
           next: (res) => {
             let updatedCourse: PostCourse = {
-              name: res.data.name,
-              moms: res.data.moms.filter((mom: string) => mom !== this.selectedId)
+              name: res.name,
+              moms: res.moms.filter(
+                (mom: string) => mom !== this.selectedId
+              ),
             };
-            this.restService.putCourse(courseId, updatedCourse).subscribe();
-          }
+            this.dataService.putCourse(courseId, updatedCourse)
+          }     
         })
-      })
+      });
     }
   }
 

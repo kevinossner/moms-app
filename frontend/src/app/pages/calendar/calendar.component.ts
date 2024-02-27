@@ -13,7 +13,6 @@ import { forkJoin } from 'rxjs';
 export class CalendarComponent {
   constructor(
     private router: Router,
-    private restService: RestService,
     private dataService: DataService
   ) {}
   selectedDate?: any;
@@ -21,11 +20,6 @@ export class CalendarComponent {
 
   ngOnInit() {
     this.dataService.getAppointments().subscribe((res) => {res.forEach((appointment: any) => this.dates.push(appointment.date))})
-    // this.restService.getAppointments().subscribe({
-    //   next: (res) => {
-    //     res.data.forEach((appointment: any) => this.dates.push(appointment.date));
-    //   }
-    // })
   }
 
   dateClass() {
@@ -47,22 +41,9 @@ export class CalendarComponent {
     let date = this.selectedDate
       .toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
       .split(',')[0];
-    let appointments: Appointment[];
-    this.restService.getAppointmentsByDate(date).subscribe({
-      next: (res) => {
-        appointments = res.data;
-      },
-      complete: () => {
-        if (appointments.length>0) {
-          let data = {
-            date: date,
-            appointments: appointments
-          };
-          this.dataService.setData(data);
-          this.router.navigate(['/appointments/'], { skipLocationChange: true });
-        }
-      }
-    })
+    if (this.dates.includes(date)) {
+      this.router.navigate(['/appointments/info/', date], { skipLocationChange: true });
+    }
   }
 
   onAdd() {

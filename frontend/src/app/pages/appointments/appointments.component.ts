@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { take } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
+
 import {
   RestService,
   Appointment,
@@ -21,6 +22,7 @@ export class AppointmentsComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private restService: RestService,
     private dataService: DataService,
     public dialog: MatDialog,
@@ -38,38 +40,54 @@ export class AppointmentsComponent implements OnInit {
 
 
   ngOnInit(): void {
-    let data = this.dataService.getData();
-    this.selectedDate = data.date;
-    this.dataService.getAppointments().subscribe((res) => {this.appointments = res});
-    // this.appointments = data.appointments;
-    this.isSelected = new Array(data.appointments.length).fill(false);
-    this.appointments.forEach((appointment) => {
-      this.restService.getCourse(appointment.courseId).subscribe({
-        next: (course) => {
-          this.courses.push(course.data)
-          this.momIds.push(course.data.moms)
-        }
-      })
-    })
-  }
+    this.route.params.subscribe((params) => {
+      this.selectedDate = params["date"]
 
-  onCardClick(i: number): void {
-    if (this.isSelected[i]) {
-      this.isSelected[i] = false;
-      this.selectedMoms = [];
-    } else {
-      this.selectedMoms = [];
-      this.momIds[i].forEach((momId) => {
-        this.restService.getMom(momId).subscribe({
-          next: (res) => {
-            this.selectedMoms.push(res.data)
-          }
+      this.dataService.getAppointmentsByDate(params["date"]).pipe(first()).subscribe((appointments) => {
+        this.appointments = appointments
+        appointments.forEach((appointment) => {
+          this.dataService.getCourse(appointment.courseId).pipe(first()).subscribe((course) => {
+            this.courses.push(course);
+            this.momIds.push(course.momIds);
+          })
         })
       })
-    this.isSelected = new Array(this.isSelected.length).fill(false)
-    this.isSelected[i] = true;      
-    }
+    })
+
+
+
+    // let data = this.dataService.getData();
+    // this.selectedDate = data.date;
+    // this.dataService.getAppointments().subscribe((res) => {this.appointments = res});
+    // // this.appointments = data.appointments;
+    // this.isSelected = new Array(data.appointments.length).fill(false);
+    // this.appointments.forEach((appointment) => {
+    //   this.restService.getCourse(appointment.courseId).subscribe({
+    //     next: (course) => {
+    //       this.courses.push(course.data)
+    //       this.momIds.push(course.data.moms)
+    //     }
+    //   })
+    // })
   }
+
+  // onCardClick(i: number): void {
+  //   if (this.isSelected[i]) {
+  //     this.isSelected[i] = false;
+  //     this.selectedMoms = [];
+  //   } else {
+  //     this.selectedMoms = [];
+  //     this.momIds[i].forEach((momId) => {
+  //       this.restService.getMom(momId).subscribe({
+  //         next: (res) => {
+  //           this.selectedMoms.push(res.data)
+  //         }
+  //       })
+  //     })
+  //   this.isSelected = new Array(this.isSelected.length).fill(false)
+  //   this.isSelected[i] = true;      
+  //   }
+  // }
 
   // onAdd(appointmentId: number): void {
   //   if (this.selectedMom) {

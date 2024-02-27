@@ -1,6 +1,6 @@
 <h1>{{ selectedDate }}</h1>
 <div *ngFor="let course of courses; let i = index">
-  <mat-card class="appointment-card" (click)="onCardClick(i)">
+  <mat-card class="appointment-card">
     <mat-card-header>
       <mat-card-title-group>
         <mat-card-title
@@ -12,12 +12,7 @@
       <div class="row">
         <div class="col">
           <mat-icon matListItemIcon>people</mat-icon>
-          <p>0/{{ momIds[i].length }}</p>
-        </div>
-      </div>
-      <div *ngIf="isSelected[i]">
-        <div *ngFor="let mom of selectedMoms; let i = index">
-          <p>{{mom.firstName}} {{mom.lastName}}</p>
+          <p>0/{{ course.moms.length }}</p>
         </div>
       </div>
     </mat-card-content>
@@ -26,7 +21,6 @@
 <button mat-fab class="back-btn" (click)="onBack()">
   <mat-icon>arrow_back_ios_new</mat-icon>
 </button>
-<p>{{ test }}</p>
 
 <!-- <h1>{{ selectedDate }}</h1>
 <div *ngFor="let course of courses; let i = index">

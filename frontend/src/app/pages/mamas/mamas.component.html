@@ -3,13 +3,24 @@
   <mat-card *ngSwitchCase="true" class="mama-card-ok">
     <mat-card-header>
       <mat-card-title-group>
-        <mat-card-title><h4>{{ mom.firstName }} {{ mom.lastName }}</h4></mat-card-title>
+        <mat-card-title
+          ><h4>{{ mom.firstName }} {{ mom.lastName }}</h4></mat-card-title
+        >
       </mat-card-title-group>
       <button mat-icon-button (click)="openDialog(template, mom.id)">
         <mat-icon class="colored-icon">close</mat-icon>
       </button>
     </mat-card-header>
-    <mat-card-content>Teilnahmen: {{ mom.attendance }}</mat-card-content>
+    <mat-card-content>
+      <div class="col">
+        <div class="row">
+          <p>Kurse: {{ mom.courses.length }}</p>
+        </div>
+        <div class="row">
+          <p>Teilnahmen: {{ mom.attendance }}</p>
+        </div>
+      </div>
+    </mat-card-content>
     <mat-card-actions align="end">
       <button mat-icon-button (click)="onEdit(mom.id)">
         <mat-icon class="colored-icon">edit</mat-icon>
@@ -19,13 +30,24 @@
   <mat-card *ngSwitchCase="false" class="mama-card-nok">
     <mat-card-header>
       <mat-card-title-group>
-        <mat-card-title><h4>{{ mom.firstName }} {{ mom.lastName }}</h4></mat-card-title>
+        <mat-card-title
+          ><h4>{{ mom.firstName }} {{ mom.lastName }}</h4></mat-card-title
+        >
       </mat-card-title-group>
       <button mat-icon-button (click)="openDialog(template, mom.id)">
         <mat-icon class="colored-icon">close</mat-icon>
       </button>
     </mat-card-header>
-    <mat-card-content>Teilnahmen: {{ mom.attendance }}</mat-card-content>
+    <mat-card-content>
+      <div class="col">
+        <div class="row">
+          <p>Kurse: {{ mom.courses.length }}</p>
+        </div>
+        <div class="row">
+          <p>Teilnahmen: {{ mom.attendance }}</p>
+        </div>
+      </div>
+    </mat-card-content>
     <mat-card-actions align="end">
       <button mat-icon-button (click)="onEdit(mom.id)">
         <mat-icon class="colored-icon">edit</mat-icon>
