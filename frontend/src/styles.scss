@@ -8,6 +8,8 @@
 // Be sure that you only ever include this mixin once!
 @include mat.core();
 
+@import '~firebaseui/dist/firebaseui.css';
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
@@ -118,4 +120,24 @@ h1 {
 
 .mat-primary .mat-pseudo-checkbox-checked.mat-pseudo-checkbox-full {
   background-color: var(--color-main);
+}
+
+.mdl-button--raised.mdl-button--colored {
+  background-color: var(--color-main);
+}
+
+.mdl-button--raised.mdl-button--colored:hover {
+  background-color: var(--color-light);
+}
+
+.mdc-line-ripple::after {
+  border-bottom-color: var(--color-main) !important;
+}
+
+.mdc-floating-label--float-above {
+  color: var(--color-text) !important;
+}
+
+.firebaseui-textfield.mdl-textfield .firebaseui-label::after {
+  background-color: var(--color-main) !important;
 }

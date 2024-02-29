@@ -25,6 +25,10 @@ import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
+import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
+import {AngularFireModule} from '@angular/fire/compat';
+import {AngularFireAuthModule} from '@angular/fire/compat/auth';
+
 import { MamasComponent } from './pages/mamas/mamas.component';
 import { HomeComponent } from './pages/home/home.component';
 import { MamaAddComponent } from './pages/mama-add/mama-add.component';
@@ -32,6 +36,18 @@ import { MamaEditComponent } from './pages/mama-edit/mama-edit.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { AppointmentsComponent } from './pages/appointments/appointments.component';
 import { AppointmentsAddComponent } from './pages/appointments-add/appointments-add.component';
+
+
+const firebaseUiAuthConfig: firebaseui.auth.Config = {
+  signInFlow: 'popup',
+  signInOptions: [
+      {
+          requireDisplayName: false,
+          provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
+      }
+  ],
+  credentialHelper: firebaseui.auth.CredentialHelper.NONE
+};
 
 @NgModule({
   declarations: [
@@ -46,7 +62,10 @@ import { AppointmentsAddComponent } from './pages/appointments-add/appointments-
   ],
   imports: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),
+    AngularFireModule.initializeApp(environment.firebase),
     provideFirestore(() => getFirestore()),
+    AngularFireAuthModule,
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
