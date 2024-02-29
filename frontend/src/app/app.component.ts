@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-root',
@@ -8,9 +9,18 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'moms';
-  constructor(private router: Router) { }
+  constructor(private router: Router, public fbAuth: AngularFireAuth) { }
 
   navigate(route: string) {
     this.router.navigate([route], { skipLocationChange: true });
+  }
+
+  successLoginCallback($event: any): void {
+    console.log($event)
+  }
+
+
+  errorLoginCallback($event: any): void {
+    console.log($event)
   }
 }
