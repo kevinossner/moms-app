@@ -83,6 +83,11 @@ export class DataService {
     return addDoc(aCollection, data)
   }
 
+  putAppointment(id: string, data: any): Promise<any> {
+    const aCollection = doc(this.firestore, `appointments/${id}`);
+    return updateDoc(aCollection, data)
+  }
+
   getCourses(): Observable<any[]> {
     const aCollection = collection(this.firestore, 'courses');
     return collectionData(aCollection, { idField: 'id' });

@@ -11,8 +11,30 @@
     <mat-card-content>
       <div class="row">
         <div class="col">
-          <mat-icon matListItemIcon>people</mat-icon>
-          <p>0/{{ course.moms.length }}</p>
+          <mat-icon>people</mat-icon>
+          <mat-icon *ngIf="i !== selectedCardIndex" (click)="onExpand(i)"
+            >expand_more</mat-icon
+          >
+          <mat-icon *ngIf="i == selectedCardIndex" (click)="onCollapse(i)"
+            >expand_less</mat-icon
+          >
+          <p>{{ appointments[i].momsAttended.length }}/{{ course.moms.length }}</p>
+          <div *ngIf="i == selectedCardIndex">
+            <mat-list *ngFor="let mom of selectedMoms; let j = index">
+              <mat-list-item>
+                <div class="row">
+                  <div class="col-9">{{ mom.firstName }} {{ mom.lastName }}</div>
+                  <div class="col-3">
+                    <mat-checkbox
+                      [checked]="appointments[i].momsAttended.includes(mom.id)"
+                      (change)="onCheckChange($event, i, j)"
+                    >
+                    </mat-checkbox>
+                  </div>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </div>
         </div>
       </div>
     </mat-card-content>
