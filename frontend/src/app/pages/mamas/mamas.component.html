@@ -13,8 +13,10 @@
     </mat-card-header>
     <mat-card-content>
       <div class="col">
-        <div class="row">
-          <p>Kurse: {{ mom.courses.length }}</p>
+        <div class="row course-icons">
+          <div class="col-1" *ngFor="let course of mom.courses">
+            <mat-icon>{{iconMapping[course]}}</mat-icon>
+          </div>
         </div>
         <div class="row">
           <p>Teilnahmen: {{ mom.attendance }}</p>
@@ -40,8 +42,10 @@
     </mat-card-header>
     <mat-card-content>
       <div class="col">
-        <div class="row">
-          <p>Kurse: {{ mom.courses.length }}</p>
+        <div class="row course-icons">
+          <div class="col-1" *ngFor="let course of mom.courses">
+            <mat-icon>{{iconMapping[course]}}</mat-icon>
+          </div>
         </div>
         <div class="row">
           <p>Teilnahmen: {{ mom.attendance }}</p>

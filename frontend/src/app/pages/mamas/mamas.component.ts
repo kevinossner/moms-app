@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-
 @Component({
   selector: 'app-mamas',
   templateUrl: './mamas.component.html',
@@ -23,6 +22,12 @@ export class MamasComponent implements OnInit {
   moms: Mom[] = [];
   selectedId: string | undefined;
   dialogRef: any;
+  public iconMapping: { [key: string]: string } = {
+    "3Ly2jnpK0TkyVLgzLVhC": "pregnant_woman",
+    "N0yraDnSq0lOkTx6OqJV": "child_friendly",
+    "VLIyvSrhI7H6YdFfUfol": "child_friendly",
+    "zG1f9JxSmqLztrmKQgM0": "nature"
+  };
 
   ngOnInit(): void {
     this.dataService.getMoms().subscribe((res: any) => {
