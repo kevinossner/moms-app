@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 import {
   RestService,
   Appointment,
   Mom,
-  Course
+  Course,
 } from '../../services/rest.service';
 import { DataService } from '../../services/data.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,7 +19,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./appointments.component.scss'],
 })
 export class AppointmentsComponent implements OnInit {
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -34,41 +33,71 @@ export class AppointmentsComponent implements OnInit {
   public courses: Course[] = [];
   public momIds: string[][] = [];
   private dialogRef: any;
-  public test: any;
-  public selectedMoms: Mom[] = [];
   public isSelected: boolean[] = [];
-
+  public selectedCardIndex: number | undefined;
+  public selectedMoms: Mom[] = [];
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.selectedDate = params["date"]
+      this.selectedDate = params['date'];
 
-      this.dataService.getAppointmentsByDate(params["date"]).pipe(first()).subscribe((appointments) => {
-        this.appointments = appointments
-        appointments.forEach((appointment) => {
-          this.dataService.getCourse(appointment.courseId).pipe(first()).subscribe((course) => {
-            this.courses.push(course);
-            this.momIds.push(course.momIds);
-          })
-        })
-      })
-    })
+      this.dataService
+        .getAppointmentsByDate(params['date'])
+        .pipe(first())
+        .subscribe((appointments) => {
+          this.appointments = appointments;
 
+          const observables = appointments.map((appointment) => {
+            return this.dataService
+              .getCourse(appointment.courseId)
+              .pipe(first());
+          });
 
+          forkJoin(observables).subscribe((courses) => {
+            this.courses = courses;
+            this.momIds = courses.map((course) => course.moms);
+          });
+        });
+    });
+  }
 
-    // let data = this.dataService.getData();
-    // this.selectedDate = data.date;
-    // this.dataService.getAppointments().subscribe((res) => {this.appointments = res});
-    // // this.appointments = data.appointments;
-    // this.isSelected = new Array(data.appointments.length).fill(false);
-    // this.appointments.forEach((appointment) => {
-    //   this.restService.getCourse(appointment.courseId).subscribe({
-    //     next: (course) => {
-    //       this.courses.push(course.data)
-    //       this.momIds.push(course.data.moms)
-    //     }
-    //   })
-    // })
+  onExpand(i: number): void {
+    this.selectedCardIndex = i;
+    this.selectedMoms = [];
+    const observables = this.momIds[i].map((momId) => {
+      return this.dataService
+        .getMom(momId)
+        .pipe(first());
+    });
+
+    forkJoin(observables).subscribe((moms) => {
+      this.selectedMoms = moms;
+    });
+  }
+
+  onCollapse(i: number): void {
+    this.selectedCardIndex = undefined;
+    this.selectedMoms = [];
+  }
+
+  onCheckChange($event: any, i: number, j: number): void {
+    if ($event.checked) {
+      this.selectedMoms[j].attendance += 1;
+      let { id: momId, ...updatedMom } = this.selectedMoms[j];
+      this.dataService.putMom(this.selectedMoms[j].id, updatedMom);
+      this.appointments[i].momsAttended.push(momId);
+      let { id: appointmentId, ...updatedAppointment } = this.appointments[i];
+      this.dataService.putAppointment(appointmentId, updatedAppointment);
+    } else {
+      this.selectedMoms[j].attendance -= 1;
+      let { id: momId, ...updatedMom } = this.selectedMoms[j];
+      this.dataService.putMom(this.selectedMoms[j].id, updatedMom);
+      this.appointments[i].momsAttended = this.appointments[
+        i
+      ].momsAttended.filter((elem) => elem !== momId);
+      let { id: appointmentId, ...updatedAppointment } = this.appointments[i];
+      this.dataService.putAppointment(appointmentId, updatedAppointment);
+    }
   }
 
   // onCardClick(i: number): void {
@@ -85,7 +114,7 @@ export class AppointmentsComponent implements OnInit {
   //       })
   //     })
   //   this.isSelected = new Array(this.isSelected.length).fill(false)
-  //   this.isSelected[i] = true;      
+  //   this.isSelected[i] = true;
   //   }
   // }
 
